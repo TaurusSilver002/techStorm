@@ -3,6 +3,15 @@ package com.malkinfo.gridlayoutexample
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -17,8 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.malkinfo.gridlayoutexample.model.EventDomainData
 import com.malkinfo.gridlayoutexample.ui.theme.GridLayoutExampleTheme
-import com.malkinfo.gridlayoutexample.view.EventGrid
-import com.malkinfo.gridlayoutexample.view.EventsDataDetails
+import com.malkinfo.gridlayoutexample.model.MenuVal
+import com.malkinfo.gridlayoutexample.view.*
 
 class MainActivity : ComponentActivity() {
 
@@ -32,7 +41,6 @@ class MainActivity : ComponentActivity() {
                     /** ok now call fun NavigatePage*/
 
                     NavigatePage()
-
                 }
             }
         }
@@ -44,6 +52,71 @@ class MainActivity : ComponentActivity() {
 fun NavigatePage(){
 
     val navHostController = rememberNavController()
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            AppBar(
+                onNavigationIconClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }
+            )
+        },
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerContent = {
+            DrawerHeader()
+            DrawerBody(
+                items = listOf(
+                    MenuVal(
+                        id = "Schedule",
+                        title = "Schedule",
+                        contentDescription = "view schedule",
+                        icon = Icons.Default.AddCircle
+                    ),
+                    MenuVal(
+                        id = "Results",
+                        title = "Results",
+                        contentDescription = "View results",
+                        icon = Icons.Default.KeyboardArrowRight
+                    ),
+                    MenuVal(
+                        id = "Sponcers",
+                        title = "Sponcers",
+                        contentDescription = "View sponcers",
+                        icon = Icons.Default.KeyboardArrowRight
+                    ),
+                    MenuVal(
+                        id = "Team",
+                        title = "Team",
+                        contentDescription = "View team",
+                        icon = Icons.Default.KeyboardArrowRight
+                    ),
+                    MenuVal(
+                        id = "Developer",
+                        title = "Developer",
+                        contentDescription = "View Developer",
+                        icon = Icons.Default.Face
+                    ),
+                    MenuVal(
+                        id = "About Us",
+                        title = "About Us",
+                        contentDescription = "View details",
+                        icon = Icons.Default.Info
+                    ),
+                ),
+                onItemClick = {
+                    println("Clicked on ${it.title}")
+                }
+            )
+
+        }
+
+    ) {
+
+    }
 
 
     NavHost(
